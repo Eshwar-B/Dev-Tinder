@@ -2,14 +2,22 @@ const express = require("express");
 
 const app = express();
 
-app.use("/demo", (req, res) => {
-    res.send("Dev Tinder");
+
+app.get("/user", (req, res) => {
+    res.send({ name: "Eshwar", age: 22 });
 });
 
-app.use("/", (req, res) => {
-    res.send("Home page, Login or register, signup");
+app.post("/user", (req, res) => {
+    res.send("User data saved successfully")
 })
 
+app.delete("/user", (req, res) => {
+    res.send("User data deleted successfully")
+})
+
+app.use("/home", (req, res) => {
+    res.send("Home page");
+});
 
 app.listen(1000, () => {
     console.log("Server started on port 1000");
