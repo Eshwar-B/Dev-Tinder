@@ -2,12 +2,13 @@ const express = require("express");
 
 const app = express();
 
-
 app.get("/user", (req, res) => {
+    console.log(req.query);
     res.send({ name: "Eshwar", age: 22 });
 });
 
-app.post("/user", (req, res) => {
+app.post("/user/:id/:name", (req, res) => {
+    console.log(req.params);
     res.send("User data saved successfully")
 })
 
