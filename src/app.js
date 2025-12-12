@@ -2,22 +2,37 @@ const express = require("express");
 
 const app = express();
 
-app.get("/user", (req, res) => {
-    console.log(req.query);
-    res.send({ name: "Eshwar", age: 22 });
+const { adminAuth, userAuth } = require("./middlewares/auth");
+
+app.use("/admin", adminAuth);
+
+app.get("/user", userAuth, (req, res) => {
+    res.send("User data sent successfully");
 });
 
-app.post("/user/:id/:name", (req, res) => {
-    console.log(req.params);
-    res.send("User data saved successfully")
+app.post("/login", (req, res) => {
+    res.send("Login successful");
 })
 
-app.delete("/user", (req, res) => {
-    res.send("User data deleted successfully")
-})
+app.get("/admin/getAllData", (req, res) => {
+    res.send("All data sent successfully");
+});
 
-app.use("/home", (req, res) => {
-    res.send("Home page");
+app.get("/admin/deleteUser", (req, res) => {
+    res.send("Deleted user successfully");
+});
+
+app.get(
+    "/route",
+    (req, res, next) => {
+        console.log("1st response");
+        // res.send("1st response");
+        next();
+    });
+
+app.get("/route", (req, res) => {
+    console.log("2nd response");
+    res.send("2nd response");
 });
 
 app.listen(1000, () => {
