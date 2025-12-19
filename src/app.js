@@ -1,40 +1,41 @@
 const express = require("express");
 
 const app = express();
+const connectDB = require("./config/database");
+const userModel = require("./models/user");
 
-const { adminAuth, userAuth } = require("./middlewares/auth");
+app.post("/signup", async (req, res) => {
 
-app.use("/admin", adminAuth);
+    const userObj = {
+        name: "bhaskar",
+        email: "bhaskar@gmail.com",
+        password: "123456",
+        age: 21,
+        gender: "male"
+    };
 
-app.get("/user", userAuth, (req, res) => {
-    res.send("User data sent successfully");
+    try {
+        const user = new userModel(userObj);
+        await user.save();
+        res.send("User saved successfully ");
+    } catch (err) {
+        res.status(400).send("Error saving the user", err.message);
+    }
+
+
 });
 
-app.post("/login", (req, res) => {
-    res.send("Login successful");
-})
+connectDB().then(() => {
 
-app.get("/admin/getAllData", (req, res) => {
-    res.send("All data sent successfully");
-});
-
-app.get("/admin/deleteUser", (req, res) => {
-    res.send("Deleted user successfully");
-});
-
-app.get(
-    "/route",
-    (req, res, next) => {
-        console.log("1st response");
-        // res.send("1st response");
-        next();
+    app.listen(1000, () => {
+        console.log("Server started on port 1000");
     });
 
-app.get("/route", (req, res) => {
-    console.log("2nd response");
-    res.send("2nd response");
+    console.log("Connected to MongoDB cluster");
+
+}).catch((err) => {
+
+    console.error("Failed to connect to MongoDB", err);
+
 });
 
-app.listen(1000, () => {
-    console.log("Server started on port 1000");
-});
